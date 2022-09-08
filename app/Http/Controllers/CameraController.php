@@ -46,7 +46,7 @@ class CameraController extends Controller
      */
     public function show(Camera $camera)
     {
-        //
+        return $camera;
     }
 
     /**

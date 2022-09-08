@@ -10,7 +10,7 @@ class Camera extends Model
     use HasFactory;
     protected $table = 'cameras';
     protected $fillable = [
-        'ipaddress',
+        'ip_address',
         'username',
         'password',
         'manufacturer',
@@ -21,7 +21,7 @@ class Camera extends Model
     ];
     protected $visible = [
         'id',
-        'ipaddress',
+        'ip_address',
         'username',
         'manufacturer',
         'model',
