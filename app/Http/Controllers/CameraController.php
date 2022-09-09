@@ -80,6 +80,26 @@ class CameraController extends Controller
      */
     public function destroy(Camera $camera)
     {
-        //
+        Camera::destroy($camera->id);
+    }
+
+
+    public function initCamera(Request $request)
+    {
+        $path = app_path('bin');
+        exec($path . "/initCamera $request->ip_address $request->username $request->password", $output, $resultcode);
+
+        return $output;
+    }
+    public function startBufferRecord(Request $request)
+    {
+    }
+    public function concateBuffer(Request $request)
+    {
+    }
+    public function triggerEvent(Request $request)
+    {
+
+            // return $request;
     }
 }

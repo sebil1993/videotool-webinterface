@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CameraController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,5 +19,8 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('Welcome');
 });
+
 Route::get('cameras', [CameraController::class, "index"]);
-Route::get('cameras/{camera}', [CameraController::class, "show"]);          
+Route::post('cameras/init', [CameraController::class, "initCamera"]);
+
+Route::get('cameras/{camera}', [CameraController::class, "show"]);
