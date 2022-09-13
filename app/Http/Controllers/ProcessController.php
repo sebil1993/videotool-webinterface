@@ -26,7 +26,7 @@ class ProcessController extends Controller
 
         $proc = Process::create([
             'camera_id' => $camera->id,
-            'command' => proc_get_status($process)['command'],
+            'command' => "startBufferRecord",
             'running' => proc_get_status($process)['running'],
             'p_id' => proc_get_status($process)['pid']
         ]);
@@ -36,11 +36,32 @@ class ProcessController extends Controller
     {
         Process::where('p_id', $p_id)->delete();
         posix_kill($p_id, 9);
-        posix_kill($p_id+1, 9);
+        posix_kill($p_id + 1, 9);
     }
 
     public function concateBuffer(Request $request)
     {
+        if (Process::where("command", "concateBuffer")->exists())
+            return true;
+        else {
+            $descriptorspec = array(
+                0 => array("pipe", "r"),
+                1 => array("pipe", "w"),
+                2 => array("pipe", "w")
+            );
+            $cwd = app_path('bin');
+            
+            $path = app_path('bin');
+            $command = $path . "/concateBuffer";
+            $process = proc_open($command, $descriptorspec, $pipes, $cwd);
+
+            $proc = Process::create([
+                'command' => "concateBuffer",
+                'running' => proc_get_status($process)['running'],
+                'p_id' => proc_get_status($process)['pid']
+            ]);
+            return $proc;
+        }
     }
     public function triggerEvent(Request $request)
     {

@@ -92,10 +92,6 @@ export default {
       }
     },
   },
-  computed: {
-    hasProcess() {
-      return this.process ? false : true;
-    },
-  },
+
 };
 </script>

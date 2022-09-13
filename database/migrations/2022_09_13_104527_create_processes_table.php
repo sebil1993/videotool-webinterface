@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('P_ID');
             $table->string('command');
             $table->boolean('running');
-            $table->foreignId('camera_id')->constrained();
+            $table->foreignId('camera_id')->nullable()->constrained();
             $table->timestamps();
         });
     }
