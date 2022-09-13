@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Camera;
+use App\Models\Event;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class CameraController extends Controller
@@ -46,7 +48,7 @@ class CameraController extends Controller
      */
     public function show(Camera $camera)
     {
-        return $camera;
+        return Camera::where('id', $camera->id)->get();
     }
 
     /**
@@ -80,26 +82,17 @@ class CameraController extends Controller
      */
     public function destroy(Camera $camera)
     {
-        Camera::destroy($camera->id);
+        $camera->delete();
     }
 
 
     public function initCamera(Request $request)
     {
         $path = app_path('bin');
-        exec($path . "/initCamera $request->ip_address $request->username $request->password", $output, $resultcode);
 
+        exec($path . "/initCamera $request->ip_address $request->username $request->password", $output, $resultcode);
         return $output;
     }
-    public function startBufferRecord(Request $request)
-    {
-    }
-    public function concateBuffer(Request $request)
-    {
-    }
-    public function triggerEvent(Request $request)
-    {
 
-            // return $request;
-    }
+  
 }

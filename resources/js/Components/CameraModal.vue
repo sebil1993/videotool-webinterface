@@ -30,6 +30,7 @@
           id="password"
           class="border border-gray-400 p-px m-px rounded"
           type="password"
+          @keyup.enter="initCamera"
         />
       </div>
     </div>
@@ -38,6 +39,7 @@
       <button
         class="bg-blue-500 text-white rounded border border-black mr-1 w-1/2"
         @click="initCamera"
+        @keyup.enter="initCamera"
       >
         bestätigen
       </button>
@@ -65,6 +67,11 @@ export default {
   methods: {
     initCamera() {
       if (this.ip_address != "" && this.username != "" && this.password != "") {
+        // console.log("cameras/init", {
+        //     ip_address: this.ip_address,
+        //     username: this.username,
+        //     password: this.password,
+        //   });
         axios
           .post("cameras/init", {
             ip_address: this.ip_address,
@@ -72,20 +79,23 @@ export default {
             password: this.password,
           })
           .then((response) => {
+            console.log(response);
+            if (response.data[6] == "aborting...") {
+              alert("something went wrong");
+            }
             if (response.data[1] == "camera found") {
               alert("camera already exists");
               this.ip_address = "";
               this.username = "";
               this.password = "";
-              this.closeModal();
             }
+            this.closeModal();
           });
       } else {
         alert("fields are empty");
       }
     },
     closeModal() {
-      console.log("emit(closeModal)");
       this.$emit("closeModal");
     },
   },

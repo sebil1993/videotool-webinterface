@@ -1,0 +1,6 @@
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:3
+#EXT-X-MEDIA-SEQUENCE:0
+#EXTINF:2.666667,
+/Users/kentix/Documents/git/videotool-webinterface/app/storage/app/cameras/MOBOTIX_MOVE_MOVE-VD1A-2-IR_0003c5c025b4/0003c5c025b40.ts
