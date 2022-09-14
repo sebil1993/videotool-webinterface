@@ -8,38 +8,76 @@ use App\Models\Process;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
 class ProcessController extends Controller
 {
+    public function index()
+    {
+        return Process::all();
+    }
+
+    public function show(Camera $camera)
+    {
+        return Process::where('camera_id', $camera->id)->first();
+    }
+
     public function startBufferRecord(Camera $camera)
     {
+
         $descriptorspec = array(
             0 => array("pipe", "r"),
             1 => array("pipe", "w"),
             2 => array("pipe", "w")
         );
-        $cwd = app_path('bin');
-
-
+        $cwd = getcwd();
         $path = app_path('bin');
         $command = $path . "/startBufferRecord $camera->ip_address";
+
         $process = proc_open($command, $descriptorspec, $pipes, $cwd);
+        $p_id = proc_get_status($process)['pid'];
+        if (proc_get_status($process)['running'] == "true") {
+            $c_p_id = 0;
+            while ($c_p_id == 0) {
+                usleep(2500);
+                $c_p_id = intval(shell_exec("pgrep -P $p_id"));
+            }
 
-        $proc = Process::create([
-            'camera_id' => $camera->id,
-            'command' => "startBufferRecord",
-            'running' => proc_get_status($process)['running'],
-            'p_id' => proc_get_status($process)['pid']
-        ]);
-        return $proc;
+            $created_process = Process::create([
+                'camera_id' => $camera->id,
+                'command' => "startBufferRecord",
+                'c_p_id' => $c_p_id,
+                'p_id' => $p_id
+            ]);
+            if (Process::where('command', "concateBuffer")->get()->count() == 0) {
+                $this->concateBuffer();
+            }
+            return $created_process;
+        } else {
+            return "couldn't start process";
+        }
     }
-    public function destroy($p_id)
+
+    public function stopBufferRecord(Camera $camera)
     {
-        Process::where('p_id', $p_id)->delete();
-        posix_kill($p_id, 9);
-        posix_kill($p_id + 1, 9);
+        $process = $this->show($camera);
+        posix_kill($process->c_p_id, 9);
+        posix_kill($process->p_id, 9);
+
+        $process->delete();
+        if (Process::all()->count() == 1) {
+            if ($concateProcess = Process::where('command', "concateBuffer")->first()) {
+                posix_kill($concateProcess->p_id, 9);
+                $concateProcess->delete();
+                return $concateProcess;
+            }
+        }
+        // if (Process::where('command', "concateBuff3er")->first() != null) {
+        //     $concateProcess = Process::where('command', "concateBuff3er")->first();
+        //     $concateProcess->delete();
+        // }
     }
 
-    public function concateBuffer(Request $request)
+    public function concateBuffer()
     {
         if (Process::where("command", "concateBuffer")->exists())
             return true;
@@ -49,25 +87,31 @@ class ProcessController extends Controller
                 1 => array("pipe", "w"),
                 2 => array("pipe", "w")
             );
-            $cwd = app_path('bin');
-            
+            $cwd = getcwd();
+
             $path = app_path('bin');
             $command = $path . "/concateBuffer";
+
+
             $process = proc_open($command, $descriptorspec, $pipes, $cwd);
 
-            $proc = Process::create([
+            return Process::create([
                 'command' => "concateBuffer",
-                'running' => proc_get_status($process)['running'],
                 'p_id' => proc_get_status($process)['pid']
             ]);
-            return $proc;
         }
     }
-    public function triggerEvent(Request $request)
+    public function triggerEvent(Camera $camera)
     {
+
         //hole die mitgelieferte id oder breche ab
-        $cam_id = $request->cam_id ?? Camera::first()->id;
-        $event_id = Event::orderByDesc('id')->first()->id + 1;
+        $cam_id = $camera->id;
+        $event = Event::create([
+            'camera_id' => $camera->id,
+            'eventtype_id' => 1,
+        ]);
+
+
 
         $ftokfile = app_path('bin') . "/concate_MSGQ";
 
@@ -82,9 +126,9 @@ class ProcessController extends Controller
             die("msg_get_queue");
 
 
-        if (!msg_send($msqid, 12, "CONCATE_$cam_id" . "_$event_id\0", false))
+        if (!msg_send($msqid, 12, "CONCATE_$cam_id" . "_$event->id\0", false))
             die("msg_send");
 
-        return "sent: CONCATE_$cam_id" . "_$event_id\0";
+        return "sent: CONCATE_$cam_id" . "_$event->id\0" . " ftok: $key";
     }
 }

@@ -25,29 +25,62 @@
       </div>
       <!-- <video :src="getLastEvent" alt=""> -->
     </div>
-    <div class="flex justify-between">
+    <div class="flex justify-start gap-2">
       <button
-        class="bg-red-400 px-2 border-black border rounded"
+        class="
+          bg-red-400
+          px-2
+          h-10
+          min-w-max
+          border-black border
+          rounded
+          text-sm
+        "
         @click="deleteCamera"
       >
         Delete Camera
       </button>
       <button
-        v-if="process == null"
-        class="bg-blue-400 px-2 border-black border rounded"
+        v-if="buffer == null"
+        class="
+          bg-blue-400
+          px-2
+          h-10
+          min-w-max
+          border-black border
+          rounded
+          text-sm
+        "
         @click="startBuffer"
       >
         Start Buffer
       </button>
       <button
         v-else
-        class="bg-blue-400 px-2 border-black border rounded"
+        class="
+          bg-blue-400
+          px-2
+          h-10
+          min-w-max
+          border-black border
+          rounded
+          text-sm
+        "
         @click="stopBuffer"
       >
         Stop Buffer
       </button>
       <button
-        class="bg-gray-300 px-2 border-black border rounded"
+        v-if="concateRunning"
+        class="
+          bg-gray-300
+          px-2
+          h-10
+          min-w-max
+          border-black border
+          rounded
+          text-sm
+        "
         @click="triggerEvent"
       >
         Trigger Event
@@ -62,13 +95,17 @@ export default {
   props: {
     camera: {
       type: Object,
+      required: true,
+    },
+    buffer: {
+      type: Object,
       required: false,
     },
-  },
-  data() {
-    return {
-      process: null,
-    };
+    concateRunning: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   methods: {
     deleteCamera() {
@@ -78,20 +115,25 @@ export default {
       });
     },
     startBuffer() {
-      axios.get(`startbuffer/${this.camera.id}`).then((response) => {
-        this.process = response.data;
-        console.log(`started buffer for ${this.camera.ip_address}`);
-      });
+      console.log("startBuffer", this.camera.id);
+      this.$emit("startBuffer", this.camera);
     },
     stopBuffer() {
-      if (this.process.p_id) {
-        axios.get(`stopbuffer/${this.process.p_id}`).then((response) => {
-          this.process = null;
+      if (this.buffer != null) {
+        axios.delete(`processes/${this.camera.id}`).then((response) => {
+          this.$emit("stopBuffer", this.camera.id);
           console.log(`stopped buffer for ${this.camera.ip_address}`);
+          console.log(response.data);
         });
       }
     },
+    triggerEvent() {
+      console.log(`trigger/${this.camera.id}`);
+      axios.get(`trigger/${this.camera.id}`).then((response) => {
+        console.log(response.data);
+      });
+    },
   },
-
+  created() {},
 };
 </script>

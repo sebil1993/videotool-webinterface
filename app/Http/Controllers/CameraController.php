@@ -20,27 +20,6 @@ class CameraController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Camera  $camera
@@ -50,30 +29,6 @@ class CameraController extends Controller
     {
         return Camera::where('id', $camera->id)->get();
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Camera  $camera
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Camera $camera)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Camera  $camera
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Camera $camera)
-    {
-        //
-    }
-
     /**
      * Remove the specified resource from storage.
      *

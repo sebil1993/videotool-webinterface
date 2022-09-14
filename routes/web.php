@@ -26,7 +26,11 @@ Route::post('cameras/init', [CameraController::class, "initCamera"]);
 Route::get('cameras/{camera}', [CameraController::class, "show"]);
 Route::delete('cameras/{camera}', [CameraController::class, "destroy"]);
 
+Route::get('processes', [ProcessController::class, "index"]);
+Route::get('processes/{camera}', [ProcessController::class, "show"]);
+Route::delete('processes/{camera}', [ProcessController::class, "stopBufferRecord"]);
+
 Route::get('startbuffer/{camera}', [ProcessController::class, "startBufferRecord"]);
-Route::get('stopbuffer/{process}', [ProcessController::class, "destroy"]);
 Route::get('concatebuffer', [ProcessController::class, "concateBuffer"]);
-// Route::get('cameras/init/mait', [CameraController::class, "triggerEvent"]);
+
+Route::get('trigger/{camera}', [ProcessController::class, "triggerEvent"]);

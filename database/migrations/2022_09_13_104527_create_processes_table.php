@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('processes', function (Blueprint $table) {
             $table->id();
-            $table->integer('P_ID');
+            $table->integer('p_id');
+            $table->integer('c_p_id')->nullable();
             $table->string('command');
-            $table->boolean('running');
             $table->foreignId('camera_id')->nullable()->constrained();
             $table->timestamps();
         });

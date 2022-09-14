@@ -12,7 +12,7 @@ class Process extends Model
     protected $fillable = [
         'camera_id',
         'command',
-        'running',
+        'c_p_id',
         'p_id'
     ];
 }
