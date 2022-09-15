@@ -3,7 +3,8 @@
     <h1 class="text-2xl ml-3 mt-2 text-center">Videotool - Webinterface</h1>
     <hr />
   </div>
-  <div class="pt-2 pl-2 w-fit">
+  <!-- <VideoPlayer :options="videoOptions" /> -->
+  <div class="pt-2 pl-2 w-fit mx-auto">
     <Overlay :isVisible="cameraModal">
       <CameraModal @closeModal="closeAddCameraModal" />
     </Overlay>
@@ -13,18 +14,31 @@
           :camera="camera"
           :buffer="getBuffer(camera)"
           :concateRunning="concateBuffer && getBuffer(camera) != null"
-          @getCameras="getCameras"
+          @deleteCamera="getCameras"
           @stopBuffer="stopBuffer"
           @startBuffer="startBuffer"
         />
       </div>
       <div
-        class="flex justify-center border bg-gray-100 w-80 h-80 rounded-lg"
+        class="
+          flex flex-col
+          justify-between
+          border border-black
+          bg-gray-100
+          w-80
+          min-h-[80]
+          rounded-lg
+          grid-cols-2 grid-rows-2
+          p-1
+          pb-px
+          mb-1
+        "
         @click="showAddCameraModal"
       >
         <label class="m-auto text-9xl text-gray-200">+</label>
       </div>
     </div>
+    <Timeline />
   </div>
 </template>
 
@@ -32,9 +46,12 @@
 import Overlay from "../Components/Overlay.vue";
 import CameraModal from "../Components/CameraModal.vue";
 import CameraTiles from "@/Components/CameraTiles.vue";
+// import VideoPlayer from "@/Components/VideoPlayer.vue";
+import Timeline from "@/Components/Timeline.vue";
+
 export default {
   name: "Welcome",
-  components: { CameraModal, Overlay, CameraTiles },
+  components: { CameraModal, Overlay, CameraTiles, Timeline },
   data() {
     return {
       cameraModal: false,

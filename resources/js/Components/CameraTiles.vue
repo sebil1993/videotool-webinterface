@@ -3,29 +3,32 @@
     class="
       flex flex-col
       justify-between
-      border
+      border border-black
       bg-gray-100
       w-80
-      h-80
+      min-h-[80]
       rounded-lg
+      grid-cols-2 grid-rows-2
+      p-1
+      pb-px
+      mb-1
     "
   >
     <div>
-      <div>
+      <div class="flex justify-between">
         <label> Camera-ID: </label>
         <label> {{ camera.id }} </label>
       </div>
-      <div>
+      <div class="flex justify-between">
         <label> IP-Address: </label>
         <label> {{ camera.ip_address }} </label>
       </div>
-      <div>
+      <div class="flex justify-between">
         <label> User: </label>
         <label> {{ camera.username }} </label>
       </div>
-      <video :src="lastEvent" alt="" />
+      <VideoPlayer :camera="camera" />
     </div>
-    <!-- <video :src="getLastEvent" /> -->
     <div class="flex justify-start gap-2">
       <button
         class="
@@ -92,7 +95,13 @@
 
 <script>
 import axios from "axios";
+import VideoPlayer from "@/Components/VideoPlayer.vue";
+// import VideoPlayer from "@/Components/VideoPlayer.vue";
+
 export default {
+  components: {
+    VideoPlayer,
+  },
   props: {
     camera: {
       type: Object,
@@ -108,18 +117,8 @@ export default {
       default: false,
     },
   },
-  data(){
-    return {
-      lastEvent: null,
-    }
-  },
+
   methods: {
-    getLastEvent() {
-      axios.get(`events/${this.camera.id}`).then((response) => {
-        this.lastEvent = response.data;
-      });
-      
-    },
     deleteCamera() {
       this.stopBuffer();
       axios.delete(`cameras/${this.camera.id}`).then(() => {
@@ -146,8 +145,6 @@ export default {
       });
     },
   },
-  created() {
-    this.getLastEvent();
-  },
+  created() {},
 };
 </script>

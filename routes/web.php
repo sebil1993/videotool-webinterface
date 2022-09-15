@@ -36,5 +36,6 @@ Route::get('concatebuffer', [ProcessController::class, "concateBuffer"]);
 Route::get('trigger/{camera}', [ProcessController::class, "triggerEvent"]);
 
 Route::get('events/{camera}', [EventController::class, "getLastEvent"]);
+Route::get('events', [EventController::class, "show"]);
 
 // Route::get('events/{camera}', [CameraController::class, "getLastEvent"]);
