@@ -48,6 +48,12 @@ class CameraController extends Controller
         exec($path . "/initCamera $request->ip_address $request->username $request->password", $output, $resultcode);
         return $output;
     }
+    public function trytry(){
+        return asset('storage/event_id_6.mp4');
+    }
+    public function getLastEvent(Camera $camera){
+        $lastEventPath = Event::where('camera_id', $camera->id)->orderByDesc('id')->first()->path;
 
-  
+        return asset("storage".substr($lastEventPath,strpos($lastEventPath,"/cameras")+strlen("/cameras"),));
+    }
 }

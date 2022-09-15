@@ -71,10 +71,7 @@ class ProcessController extends Controller
                 return $concateProcess;
             }
         }
-        // if (Process::where('command', "concateBuff3er")->first() != null) {
-        //     $concateProcess = Process::where('command', "concateBuff3er")->first();
-        //     $concateProcess->delete();
-        // }
+        //clear the buffer 
     }
 
     public function concateBuffer()
@@ -103,15 +100,15 @@ class ProcessController extends Controller
     }
     public function triggerEvent(Camera $camera)
     {
+        if(!Process::where('camera_id',$camera->id)->exists())
+            die("camera buffer not running");
+        if(!Process::where('command',"concateBuffer")->exists())
+            die("concateBuffer not running");
 
-        //hole die mitgelieferte id oder breche ab
-        $cam_id = $camera->id;
         $event = Event::create([
             'camera_id' => $camera->id,
             'eventtype_id' => 1,
         ]);
-
-
 
         $ftokfile = app_path('bin') . "/concate_MSGQ";
 
@@ -126,9 +123,9 @@ class ProcessController extends Controller
             die("msg_get_queue");
 
 
-        if (!msg_send($msqid, 12, "CONCATE_$cam_id" . "_$event->id\0", false))
+        if (!msg_send($msqid, 12, "CONCATE_$camera->id" . "_$event->id\0", false))
             die("msg_send");
 
-        return "sent: CONCATE_$cam_id" . "_$event->id\0" . " ftok: $key";
+        return "sent: CONCATE_$camera->id" . "_$event->id\0" . " ftok: $key";
     }
 }

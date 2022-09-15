@@ -23,8 +23,9 @@
         <label> User: </label>
         <label> {{ camera.username }} </label>
       </div>
-      <!-- <video :src="getLastEvent" alt=""> -->
+      <video :src="lastEvent" alt="" />
     </div>
+    <!-- <video :src="getLastEvent" /> -->
     <div class="flex justify-start gap-2">
       <button
         class="
@@ -107,7 +108,18 @@ export default {
       default: false,
     },
   },
+  data(){
+    return {
+      lastEvent: null,
+    }
+  },
   methods: {
+    getLastEvent() {
+      axios.get(`events/${this.camera.id}`).then((response) => {
+        this.lastEvent = response.data;
+      });
+      
+    },
     deleteCamera() {
       this.stopBuffer();
       axios.delete(`cameras/${this.camera.id}`).then(() => {
@@ -134,6 +146,8 @@ export default {
       });
     },
   },
-  created() {},
+  created() {
+    this.getLastEvent();
+  },
 };
 </script>

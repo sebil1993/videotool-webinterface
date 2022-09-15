@@ -89,7 +89,7 @@ export default {
   },
   computed: {
     concateBuffer() {
-      return this.buffers.find((buf) => buf.command == "concateBuffer") !=
+      return this.buffers?.find((buf) => buf.command == "concateBuffer") !=
         undefined
         ? true
         : false;

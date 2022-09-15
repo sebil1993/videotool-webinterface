@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CameraController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProcessController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -32,5 +33,8 @@ Route::delete('processes/{camera}', [ProcessController::class, "stopBufferRecord
 
 Route::get('startbuffer/{camera}', [ProcessController::class, "startBufferRecord"]);
 Route::get('concatebuffer', [ProcessController::class, "concateBuffer"]);
-
 Route::get('trigger/{camera}', [ProcessController::class, "triggerEvent"]);
+
+Route::get('events/{camera}', [EventController::class, "getLastEvent"]);
+
+// Route::get('events/{camera}', [CameraController::class, "getLastEvent"]);
