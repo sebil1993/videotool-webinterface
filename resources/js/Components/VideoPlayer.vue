@@ -2,7 +2,9 @@
   <div @mouseover="showControls" class="h-min">
     <div class="flex justify-between">
       <label>Last Event:</label>
-      <label>{{ last.timestamp }}</label>
+      <label>{{
+        last.timestamp.split("T")[0] + " " + last.timestamp.split("T")[1]
+      }}</label>
     </div>
     <div class="border border-black mb-1">
       <video id="video" :src="last.event"></video>
@@ -78,8 +80,8 @@ export default {
       video.style.width = video.clientWidth * 2;
       new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
         video.style.position = "relative";
-        video.style.height = video.clientHeight/2;
-        video.style.width = video.clientWidth/2;
+        video.style.height = video.clientHeight / 2;
+        video.style.width = video.clientWidth / 2;
       });
     },
     showControls() {},

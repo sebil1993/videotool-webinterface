@@ -66,6 +66,7 @@ class ProcessController extends Controller
         $process->delete();
         if (Process::all()->count() == 1) {
             if ($concateProcess = Process::where('command', "concateBuffer")->first()) {
+                sleep(30);
                 posix_kill($concateProcess->p_id, 9);
                 $concateProcess->delete();
                 return $concateProcess;

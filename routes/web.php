@@ -35,6 +35,8 @@ Route::get('startbuffer/{camera}', [ProcessController::class, "startBufferRecord
 Route::get('concatebuffer', [ProcessController::class, "concateBuffer"]);
 Route::get('trigger/{camera}', [ProcessController::class, "triggerEvent"]);
 
+Route::get('events/names', [EventController::class, "names"]);
+
 Route::get('events/{camera}', [EventController::class, "getLastEvent"]);
 Route::get('events', [EventController::class, "show"]);
 
