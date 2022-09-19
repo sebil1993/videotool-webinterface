@@ -1,5 +1,48 @@
 <template>
-  <div class="flex">
+  <div class="ml-1 flex w-full">
+    <div class="w-2 bg-gray-400 h-24"></div>
+    <div
+      class="
+        bg-green-300
+        h-4
+        w-4
+        my-auto
+        border border-black
+        -ml-3
+        rounded-full
+      "
+    ></div>
+    <div
+      @mouseover="showArrow"
+      class="
+        bg-green-300
+        h-fit
+        w-1/2
+        border border-black
+        my-auto
+        mx-2
+        text-xs
+        flex flex-col
+        py-1
+        rounded
+        hover:translate-x-6
+        duration-200
+      "
+    >
+      <label class="ml-2 font-bold text-left"
+        >Zeitpunkt: {{ showEventTimestamp(event) }}</label
+      >
+
+      <label class="ml-2 text-left"
+        >Camera-ID: {{ showEventCamera(event) }}
+      </label>
+
+      <label class="ml-2 text-left"
+        >Eventtyp-ID: {{ showEventType(event) }}</label
+      >
+    </div>
+  </div>
+  <!-- <div class="flex">
     <div
       class="bg-gray-400 w-5 h-5 my-auto -m-1.5 shrink-0 mr-1 rounded-full"
     ></div>
@@ -15,12 +58,10 @@
       @click="clickevent"
     >
       <div class="flex flex-col justify-between">
-        <label class="ml-2 font-bold text-left">Zeitpunkt: {{ showEventTimestamp(event) }}</label>
-        <label class="ml-2 text-left">Camera-ID: {{ showEventCamera(event) }}</label>
-        <label class="ml-2 text-left">Eventtyp-ID: {{ showEventType(event) }}</label>
+
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -34,8 +75,8 @@ export default {
   },
 
   methods: {
-    clickevent(){
-        console.log(this.event.id, "clicked");
+    clickevent() {
+      console.log(this.event.id, "clicked");
     },
     showEventTimestamp(event) {
       return event.created_at.split(".")[0].split("T")[1];
@@ -46,7 +87,6 @@ export default {
     showEventType(event) {
       return event.eventtype_id;
     },
-
   },
 };
 </script>

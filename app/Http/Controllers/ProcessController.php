@@ -74,7 +74,24 @@ class ProcessController extends Controller
         }
         //clear the buffer 
     }
+    public function getProcessInfo(Request $request)
+    {
+        // return proc_get_status(33525);
 
+
+        $descriptorspec = array(
+            0 => array("pipe", "r"),
+            1 => array("pipe", "w"),
+            2 => array("pipe", "w")
+        );
+        $cwd = getcwd();
+        $path = app_path('bin');
+        $command = $path . "/exec ./startBufferRecord 10.15.100.200";
+
+        $process = proc_open($command, $descriptorspec, $pipes, $cwd);
+
+        return proc_get_status($process);
+    }
     public function concateBuffer()
     {
         if (Process::where("command", "concateBuffer")->exists())
@@ -101,9 +118,9 @@ class ProcessController extends Controller
     }
     public function triggerEvent(Camera $camera)
     {
-        if(!Process::where('camera_id',$camera->id)->exists())
+        if (!Process::where('camera_id', $camera->id)->exists())
             die("camera buffer not running");
-        if(!Process::where('command',"concateBuffer")->exists())
+        if (!Process::where('command', "concateBuffer")->exists())
             die("concateBuffer not running");
 
         $event = Event::create([
@@ -130,3 +147,6 @@ class ProcessController extends Controller
         return "sent: CONCATE_$camera->id" . "_$event->id\0" . " ftok: $key";
     }
 }
+
+
+ 

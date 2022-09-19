@@ -5,12 +5,9 @@
       justify-between
       border border-black
       bg-gray-100
-      w-80
-      min-h-[80]
       rounded-lg
-      grid-cols-2 grid-rows-2
+      w-fit
       p-1
-      pb-px
       mb-1
     "
   >
@@ -27,11 +24,13 @@
         <label> User: </label>
         <label> {{ camera.username }} </label>
       </div>
+      <hr class="border-black" />
       <VideoPlayer :camera="camera" />
     </div>
-    <div class="flex justify-start gap-2">
+    <div class="flex justify-between gap-2">
       <button
         class="
+          hover:bg-red-500
           bg-red-400
           px-2
           h-10
@@ -47,6 +46,7 @@
       <button
         v-if="buffer == null"
         class="
+          hover:bg-blue-500
           bg-blue-400
           px-2
           h-10
@@ -75,15 +75,10 @@
         Stop Buffer
       </button>
       <button
-        v-if="concateRunning"
-        class="
-          bg-gray-300
-          px-2
-          h-10
-          min-w-max
-          border-black border
-          rounded
-          text-sm
+        :disabled="!concateRunning"
+        class="px-2 h-10 min-w-max border-black border rounded text-sm"
+        :class="
+          concateRunning ? ' bg-gray-300 hover:bg-gray-400' : 'bg-gray-300'
         "
         @click="triggerEvent"
       >
@@ -96,7 +91,6 @@
 <script>
 import axios from "axios";
 import VideoPlayer from "@/Components/VideoPlayer.vue";
-// import VideoPlayer from "@/Components/VideoPlayer.vue";
 
 export default {
   components: {

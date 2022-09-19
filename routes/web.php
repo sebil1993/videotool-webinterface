@@ -34,6 +34,7 @@ Route::delete('processes/{camera}', [ProcessController::class, "stopBufferRecord
 Route::get('startbuffer/{camera}', [ProcessController::class, "startBufferRecord"]);
 Route::get('concatebuffer', [ProcessController::class, "concateBuffer"]);
 Route::get('trigger/{camera}', [ProcessController::class, "triggerEvent"]);
+Route::get('test', [ProcessController::class, "getProcessInfo"]);
 
 Route::get('events/names', [EventController::class, "names"]);
 

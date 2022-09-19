@@ -1,8 +1,7 @@
 <template>
-  <br />
-  <div class="bg-gray-100 border rounded-lg">
+  <div class="border border-black bg-gray-100 rounded-lg w-full h-full p-1">
     <div class="flex">
-      <select v-model="date" class="mb-px rounded" @change="getEvents()">
+      <select v-model="date" class="mb-1 rounded" @change="getEvents()">
         <option
           v-for="(days, index) in eventDays"
           :key="'days' + index"
@@ -12,24 +11,21 @@
         </option>
       </select>
       <label v-if="this.events" class="m-auto">
-        {{ events.length }} Events found
+        Events found: {{ events.length }}
       </label>
     </div>
-    <div
-      class="
-        max-h-[25rem]
-        min-h-[25rem]
-        overflow-y-scroll
-        border-t border-black
-      "
-    >
-      <div class="my-2 pl-2 h-full flex border ">
-        <div class="h-full w-2 ml-2 flex flex-col bg-gray-300 rounded-sm">
-          <Event
-            v-for="(event, index) in events"
-            :key="'event' + index"
-            :event="event"
-          />
+    <hr class="border-black" />
+    <div class="grid grid-cols-2 w-full h-96">
+      <div class="bg-gray-200 w-full overflow-y-scroll overflow-x-hidden">
+        <Event
+          v-for="event in events"
+          :event="event"
+          :key="event + '_' + event.camera_id + '_' + event.id"
+        />
+      </div>
+      <div class="bg-gray-200 w-full overflow-hidden border border-black">
+        <div class="flex flex-col justify-between h-12  bg-green-200 ">
+          <!-- <VideoPlayer :camera="null" /> -->
         </div>
       </div>
     </div>
@@ -38,15 +34,16 @@
 
 <script>
 import Event from "@/Components/Event.vue";
+import VideoPlayer from "./VideoPlayer.vue";
 export default {
   name: "Timeline",
   components: {
     Event,
+    VideoPlayer,
   },
   data() {
     return {
       date: null,
-      timePeriod: null,
       events: null,
       eventDays: null,
     };
@@ -56,21 +53,22 @@ export default {
       axios
         .get(`events${this.date ? "?date=" + this.date : ""}`)
         .then((response) => {
-          this.timePeriod = response.data[0];
           this.events = response.data[1].reverse();
           console.log(`events${this.date ? "?date=" + this.date : ""}`);
         });
     },
     getEventDays() {
       axios.get(`events/names`).then((response) => {
+        this.date = response.data[0];
         this.eventDays = response.data;
       });
     },
   },
   created() {
-    this.date = new Date().toISOString().split("T")[0];
-    this.getEvents();
     this.getEventDays();
+    this.getEvents();
+    // this.date = new Date().toISOString().split("T")[0];
+    // this.date = this.eventDays[0];
   },
 };
 </script>
