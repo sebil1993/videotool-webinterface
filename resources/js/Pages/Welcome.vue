@@ -1,46 +1,43 @@
 <template >
   <div class="px-20">
-    <div>
-      <h1 class="text-2xl ml-3 mt-2 text-center">Videotool - Webinterface</h1>
-      <hr class="border-black" />
-    </div>
-    <div class="px-20 pb-20">
-      <div class="pt-2 pl-2 w-fit mx-auto">
-        <Overlay :isVisible="cameraModal">
-          <CameraModal @closeModal="closeAddCameraModal" />
-        </Overlay>
+    <h1 class="text-2xl mt-2 text-center">Videotool - Webinterface</h1>
+    <hr class="border-black mb-2" />
 
-        <div class="grid-flow-col grid-cols-3 grid gap-3 mb-2">
-          <CameraTiles
-            v-for="(camera, index) in cameras"
-            :key="'camera' + index"
-            :camera="camera"
-            :buffer="getBuffer(camera)"
-            :concateRunning="concateBuffer && getBuffer(camera) != null"
-            @deleteCamera="getCameras"
-            @stopBuffer="stopBuffer"
-            @startBuffer="startBuffer"
-          />
+    <Overlay :isVisible="cameraModal">
+      <CameraModal @closeModal="closeAddCameraModal" />
+    </Overlay>
+    <div class="min-w-max max-w-max">
+      <div class="flex gap-2 mb-2 flex-nowrap">
+        <CameraTiles
+          class=""
+          v-for="(camera, index) in cameras"
+          :key="'camera' + index"
+          :camera="camera"
+          :buffer="getBuffer(camera)"
+          :concateRunning="concateBuffer && getBuffer(camera) != null"
+          @deleteCamera="getCameras"
+          @stopBuffer="stopBuffer"
+          @startBuffer="startBuffer"
+        />
 
-          <div
-            class="
-              flex flex-col
-              justify-between
-              border border-black
-              bg-gray-100
-              rounded-lg
-              w-80
-              p-1
-              pb-px
-              mb-1
-            "
-            @click="showAddCameraModal"
-          >
-            <label class="m-auto text-9xl text-gray-200">+</label>
-          </div>
+        <div
+          class="
+            flex flex-col
+            justify-between
+            border border-black
+            bg-gray-100
+            rounded-lg
+            w-96
+            
+            p-1
+            pb-px
+          "
+          @click="showAddCameraModal"
+        >
+          <label class="m-auto text-9xl text-gray-200">+</label>
         </div>
-        <Timeline />
       </div>
+      <Timeline class="" />
     </div>
   </div>
 </template>

@@ -21,6 +21,11 @@ class EventController extends Controller
         return ["$date", Event::where('created_at', ">", $date)->where('created_at', "<", $date2)->get()];
     }
 
+    public function index(Event $event)
+    {
+        return [asset("storage" . substr($event->path, strpos($event->path, "/cameras") + strlen("/cameras"))), $event->created_at];
+    }
+
     public function getLastEvent(Camera $camera)
     {
         $lastEvent = Event::where('camera_id', $camera->id)->orderByDesc('id')->first();
@@ -29,7 +34,7 @@ class EventController extends Controller
         return [asset("storage" . substr($lastEvent->path, strpos($lastEvent->path, "/cameras") + strlen("/cameras"))), $lastEvent->created_at];
     }
 
-    public function names()
+    public function dates()
     {
         $arr = [];
         foreach (Event::where('created_at', '>', '0')->orderBy('created_at', 'desc')->pluck('created_at') as $event) {

@@ -1,24 +1,12 @@
 <template>
-  <div class="m-auto">
-    <div class="flex justify-between">
-      <label>Last Event:</label>
-      <!-- <label>{{
-        last.timestamp.split("T")[0] + " " + last.timestamp.split("T")[1]
-      }}</label> -->
-    </div>
-    <div
-      class="border border-black mb-1"
+  <!-- <div class=""> -->
+  <!-- <div
+      class="border-2 border-black"
       @mouseenter="showControls"
       @mouseleave="hideControls"
-    >
-      <!-- <video
-        class="w-full"
-        :id="'video' + camera.id"
-        :src="last.event"
-        :controls="false"
-      ></video> -->
-      <video class="w-full" :controls="false"></video>
-      <div class="w-full h-7 border-t border-black flex justify-between">
+    > -->
+  <video class="" :src="videoSrc"></video>
+  <!-- <div class="w-full h-7 border-t border-black flex justify-between">
         <button
           v-if="controlsVisible == true"
           @click="playVideo"
@@ -29,7 +17,7 @@
         <button
           v-if="controlsVisible == true"
           @click="pauseVideo"
-          class="border-black border-l border-r px-2 bg-gray-200"
+          class="border-black border-x px-2 bg-gray-200"
         >
           PAUSE
         </button>
@@ -40,21 +28,20 @@
         >
           FULL
         </button>
-      </div>
-    </div>
-  </div>
+      </div> -->
+  <!-- </div> -->
+  <!-- </div> -->
 </template>
 
 <script>
 import axios from "axios";
 export default {
   name: "VideoPlayer",
-  // props: {
-  //   camera: {
-  //     type: Object,
-  //     required: true,
-  //   },
-  // },
+  props: {
+    videoSrc: {
+      required: false,
+    },
+  },
   data() {
     return {
       controlsVisible: false,

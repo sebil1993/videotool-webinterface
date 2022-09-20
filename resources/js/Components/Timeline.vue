@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-black bg-gray-100 rounded-lg w-full h-full p-1">
+  <div class="border border-black bg-gray-100 rounded-lg p-1">
     <div class="flex">
       <select v-model="date" class="mb-1 rounded" @change="getEvents()">
         <option
@@ -10,22 +10,24 @@
           {{ days }}
         </option>
       </select>
-      <label v-if="this.events" class="m-auto">
+      <label v-if="this.events" class="my-auto ml-20">
         Events found: {{ events.length }}
       </label>
     </div>
     <hr class="border-black" />
-    <div class="grid grid-cols-2 w-full h-96">
-      <div class="bg-gray-200 w-full overflow-y-scroll overflow-x-hidden">
+    <div class="flex w-full h-96 grow-0">
+      <div class="bg-gray-200 w-1/2 overflow-y-scroll overflow-x-hidden py-1">
         <Event
           v-for="event in events"
+          :selected="selectedEvent"
           :event="event"
-          :key="event + '_' + event.camera_id + '_' + event.id"
+          :key="'event_' + event.camera_id + '_' + event.id"
+          @clickedEvent="getVideoSrc"
         />
       </div>
-      <div class="bg-gray-200 w-full overflow-hidden border border-black">
-        <div class="flex flex-col justify-between h-12  bg-green-200 ">
-          <!-- <VideoPlayer :camera="null" /> -->
+      <div class="w-1/2 bg-gray-200 border-l border-black flex">
+        <div class="">
+          <VideoPlayer :videoSrc="videoSrc" />
         </div>
       </div>
     </div>
@@ -46,32 +48,35 @@ export default {
       date: null,
       events: null,
       eventDays: null,
+      videoSrc: null,
+      selectedEvent: null,
     };
   },
   methods: {
+    getVideoSrc(event) {
+      this.selectedEvent = event;
+      axios.get(`events/${event.id}`).then((response) => {
+        this.videoSrc = response.data[0];
+      });
+    },
     getEvents() {
       axios
         .get(`events${this.date ? "?date=" + this.date : ""}`)
         .then((response) => {
           this.events = response.data[1].reverse();
-          console.log(`events${this.date ? "?date=" + this.date : ""}`);
         });
     },
     getEventDays() {
-      axios.get(`events/names`).then((response) => {
+      axios.get(`events/dates`).then((response) => {
         this.date = response.data[0];
         this.eventDays = response.data;
+        this.getEvents();
       });
     },
   },
   created() {
     this.getEventDays();
-    this.getEvents();
-    // this.date = new Date().toISOString().split("T")[0];
-    // this.date = this.eventDays[0];
   },
 };
 </script>
 
-<style>
-</style>

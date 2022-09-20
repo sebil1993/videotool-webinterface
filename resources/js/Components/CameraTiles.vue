@@ -1,17 +1,6 @@
 <template>
-  <div
-    class="
-      flex flex-col
-      justify-between
-      border border-black
-      bg-gray-100
-      rounded-lg
-      w-fit
-      p-1
-      mb-1
-    "
-  >
-    <div>
+  <div class="border border-black bg-gray-100 rounded-lg w-96 min-w-min p-1">
+    <div class="">
       <div class="flex justify-between">
         <label> Camera-ID: </label>
         <label> {{ camera.id }} </label>
@@ -24,16 +13,19 @@
         <label> User: </label>
         <label> {{ camera.username }} </label>
       </div>
-      <hr class="border-black" />
-      <VideoPlayer :camera="camera" />
     </div>
-    <div class="flex justify-between gap-2">
+    <VideoPlayer
+      class="border border-black"
+      videoSrc="http://videotool-webinterface.test/storage/AXIS_M2025-LE_ACCC8EA80800/events/event_id_24.mp4"
+    />
+    <div class="mt-2 flex justify-between">
       <button
         class="
+          h-8
+          mr-2
           hover:bg-red-500
           bg-red-400
           px-2
-          h-10
           min-w-max
           border-black border
           rounded
@@ -46,10 +38,11 @@
       <button
         v-if="buffer == null"
         class="
+          h-8
+          mr-2
           hover:bg-blue-500
           bg-blue-400
           px-2
-          h-10
           min-w-max
           border-black border
           rounded
@@ -62,9 +55,11 @@
       <button
         v-else
         class="
+          h-8
+          mr-2
+          hover:bg-blue-500
           bg-blue-400
           px-2
-          h-10
           min-w-max
           border-black border
           rounded
@@ -76,10 +71,16 @@
       </button>
       <button
         :disabled="!concateRunning"
-        class="px-2 h-10 min-w-max border-black border rounded text-sm"
-        :class="
-          concateRunning ? ' bg-gray-300 hover:bg-gray-400' : 'bg-gray-300'
+        class="
+          h-8
+          px-2
+          min-w-max
+          border-black border
+          rounded
+          text-sm
+          bg-gray-300
         "
+        :class="concateRunning ? ' hover:bg-gray-400' : ''"
         @click="triggerEvent"
       >
         Trigger Event
