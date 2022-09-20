@@ -1,5 +1,17 @@
 <template>
-  <div class="border border-black bg-gray-100 rounded-lg w-96 min-w-min p-1">
+  <div
+    class="
+      border border-black
+      bg-gray-100
+      rounded-lg
+      w-96
+      h-96
+      min-w-min
+      p-1
+      flex flex-col
+      justify-between
+    "
+  >
     <div class="">
       <div class="flex justify-between">
         <label> Camera-ID: </label>
@@ -18,7 +30,7 @@
       class="border border-black"
       videoSrc="http://videotool-webinterface.test/storage/AXIS_M2025-LE_ACCC8EA80800/events/event_id_24.mp4"
     />
-    <div class="mt-2 flex justify-between">
+    <div class="flex justify-between">
       <button
         class="
           h-8

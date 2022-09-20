@@ -15,8 +15,15 @@
       </label>
     </div>
     <hr class="border-black" />
-    <div class="flex w-full h-96 grow-0">
-      <div class="bg-gray-200 w-1/2 overflow-y-scroll overflow-x-hidden py-1">
+    <div class="flex justify-between h-96">
+      <div
+        class=" basis-1/2
+          bg-gray-100
+          py-1
+          overflow-y-scroll overflow-x-hidden
+          border-r-2 border-black
+        "
+      >
         <Event
           v-for="event in events"
           :selected="selectedEvent"
@@ -25,11 +32,7 @@
           @clickedEvent="getVideoSrc"
         />
       </div>
-      <div class="w-1/2 bg-gray-200 border-l border-black flex">
-        <div class="">
-          <VideoPlayer :videoSrc="videoSrc" />
-        </div>
-      </div>
+      <VideoPlayer class="m-auto max-w-xl" :videoSrc="videoSrc" />
     </div>
   </div>
 </template>
@@ -80,3 +83,4 @@ export default {
 };
 </script>
 
+      

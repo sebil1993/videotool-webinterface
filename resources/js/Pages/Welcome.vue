@@ -1,13 +1,13 @@
 <template >
-  <div class="px-20">
+  <div class="min-w-max max-w-max mx-auto">
     <h1 class="text-2xl mt-2 text-center">Videotool - Webinterface</h1>
     <hr class="border-black mb-2" />
 
     <Overlay :isVisible="cameraModal">
       <CameraModal @closeModal="closeAddCameraModal" />
     </Overlay>
-    <div class="min-w-max max-w-max">
-      <div class="flex gap-2 mb-2 flex-nowrap">
+    <!-- <div class=""> -->
+      <div class="grid grid-cols-3 gap-2 mb-2 flex-nowrap">
         <CameraTiles
           class=""
           v-for="(camera, index) in cameras"
@@ -28,7 +28,7 @@
             bg-gray-100
             rounded-lg
             w-96
-            
+            h-96
             p-1
             pb-px
           "
@@ -38,7 +38,7 @@
         </div>
       </div>
       <Timeline class="" />
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 

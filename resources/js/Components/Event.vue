@@ -3,7 +3,7 @@
     <div class="w-2 bg-gray-400 h-24 min-w-fit"></div>
     <div
       class="
-        bg-green-300
+        bg-gray-300
         h-4
         w-4
         my-auto
@@ -16,7 +16,7 @@
     <div
       @click="clickEvent"
       class="
-        bg-green-300
+        bg-gray-300
         h-fit
         min-w-fit
         w-1/2
