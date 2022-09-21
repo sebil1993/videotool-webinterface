@@ -23,15 +23,19 @@ class EventController extends Controller
 
     public function index(Event $event)
     {
-        return [asset("storage" . substr($event->path, strpos($event->path, "/cameras") + strlen("/cameras"))), $event->created_at];
+        if (file_exists($event->path))
+            return [asset("storage" . substr($event->path, strpos($event->path, "/cameras") + strlen("/cameras"))), $event->created_at];
+        else
+            return "file not ready";
     }
 
     public function getLastEvent(Camera $camera)
     {
+
         $lastEvent = Event::where('camera_id', $camera->id)->orderByDesc('id')->first();
         if ($lastEvent == null)
             die("keine Events für Kamera $camera->ip_address");
-        return [asset("storage" . substr($lastEvent->path, strpos($lastEvent->path, "/cameras") + strlen("/cameras"))), $lastEvent->created_at];
+        return $this->index($lastEvent);
     }
 
     public function dates()

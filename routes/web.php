@@ -27,19 +27,21 @@ Route::post('cameras/init', [CameraController::class, "initCamera"]);
 Route::get('cameras/{camera}', [CameraController::class, "show"]);
 Route::delete('cameras/{camera}', [CameraController::class, "destroy"]);
 
+
 Route::get('processes', [ProcessController::class, "index"]);
-Route::get('processes/{camera}', [ProcessController::class, "show"]);
-Route::delete('processes/{camera}', [ProcessController::class, "stopBufferRecord"]);
-Route::get('startbuffer/{camera}', [ProcessController::class, "startBufferRecord"]);
 
-Route::get('trigger/{camera}', [ProcessController::class, "triggerEvent"]);
-Route::get('test', [ProcessController::class, "getProcessInfo"]);
+Route::get('processes/{camera}/stop', [ProcessController::class, "stopBufferRecord"]);
+Route::get('processes/{camera}/start', [ProcessController::class, "startBufferRecord"]);
+Route::get('processes/{camera}/trigger', [ProcessController::class, "triggerEvent"]);
 
+Route::get('stoppo/{camera}', [ProcessController::class, "stoppo"]);
+
+Route::get('events', [EventController::class, "show"]);
 Route::get('events/dates', [EventController::class, "dates"]);
 Route::get('events/{event}', [EventController::class, "index"]);
+Route::get('events/{camera}/last', [EventController::class, "getLastEvent"]);
+
 
 // Route::get('events/{camera}', [EventController::class, "getLastEvent"]);
-Route::get('events', [EventController::class, "show"]);
-
 // Route::get('concatebuffer', [ProcessController::class, "concateBuffer"]);
 // Route::get('events/{camera}', [CameraController::class, "getLastEvent"]);

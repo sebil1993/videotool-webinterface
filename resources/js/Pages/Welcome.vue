@@ -6,39 +6,37 @@
     <Overlay :isVisible="cameraModal">
       <CameraModal @closeModal="closeAddCameraModal" />
     </Overlay>
-    <!-- <div class=""> -->
-      <div class="grid grid-cols-3 gap-2 mb-2 flex-nowrap">
-        <CameraTiles
-          class=""
-          v-for="(camera, index) in cameras"
-          :key="'camera' + index"
-          :camera="camera"
-          :buffer="getBuffer(camera)"
-          :concateRunning="concateBuffer && getBuffer(camera) != null"
-          @deleteCamera="getCameras"
-          @stopBuffer="stopBuffer"
-          @startBuffer="startBuffer"
-        />
+    <div class="grid grid-cols-3 gap-2 mb-2 flex-nowrap">
+      <CameraTiles
+        class=""
+        v-for="(camera, index) in cameras"
+        :key="'camera' + index"
+        :camera="camera"
+        :buffer="getBuffer(camera)"
+        :concateRunning="concateBuffer && getBuffer(camera) != null"
+        @deleteCamera="getCameras"
+        @stopBuffer="stopBuffer"
+        @startBuffer="startBuffer"
+      />
 
-        <div
-          class="
-            flex flex-col
-            justify-between
-            border border-black
-            bg-gray-100
-            rounded-lg
-            w-96
-            h-96
-            p-1
-            pb-px
-          "
-          @click="showAddCameraModal"
-        >
-          <label class="m-auto text-9xl text-gray-200">+</label>
-        </div>
+      <div
+        class="
+          flex flex-col
+          justify-between
+          border border-black
+          bg-gray-100
+          rounded-lg
+          w-96
+          h-96
+          p-1
+          pb-px
+        "
+        @click="showAddCameraModal"
+      >
+        <label class="m-auto text-9xl text-gray-200">+</label>
       </div>
-      <Timeline class="" />
-    <!-- </div> -->
+    </div>
+    <Timeline class="" :events="events" />
   </div>
 </template>
 
@@ -75,6 +73,12 @@ export default {
         return buffer.camera_id == camera.id;
       });
     },
+    getEvents() {
+      axios.get(`events`).then((response) => {
+        this.events = response.data[1].reverse();
+      });
+    },
+
     stopBuffer(camera) {
       let tempBufferIndex = this.buffers.findIndex((buffer) => {
         return buffer.camera_id == camera;
@@ -84,7 +88,7 @@ export default {
       this.getRunningBuffers();
     },
     startBuffer(camera) {
-      axios.get(`startbuffer/${camera.id}`).then((response) => {
+      axios.get(`processes/${camera.id}/start`).then((response) => {
         console.log(`started buffer for ${camera.ip_address}`);
         this.buffers.push(response.data);
         this.getRunningBuffers();
@@ -98,10 +102,22 @@ export default {
     showAddCameraModal() {
       this.cameraModal = true;
     },
+    startRefresh() {
+      Promise.all([
+        this.getCameras(),
+        this.getRunningBuffers(),
+        this.getEvents(),
+      ]).then(() => {
+        window.setTimeout(this.startRefresh, 5000);
+        console.log("refreshed");
+      });
+    },
   },
   created() {
     this.getCameras();
     this.getRunningBuffers();
+    this.getEvents();
+    this.startRefresh();
   },
   computed: {
     concateBuffer() {

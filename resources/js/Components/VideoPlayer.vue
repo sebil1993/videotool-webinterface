@@ -1,58 +1,71 @@
 <template>
-  <div @mouseenter="showControls" @mouseleave="hideControls">
-    <video class="" :src="videoSrc"></video>
-    <div class="w-full h-7 flex border border-black justify-between text-sm">
-      <button
-        v-if="controlsVisible == true"
-        @click="playVideo"
-        class="border-black border-r px-2 bg-green-200"
-      >
-        <font-awesome-icon icon="fa-solid fa-play" />
-      </button>
-      <button
-        v-if="controlsVisible == true"
-        @click="pauseVideo"
-        class="border-black border-x px-2 bg-gray-200"
-      >
-        <font-awesome-icon icon="fa-solid fa-pause" />
-      </button>
-      <button
-        v-if="controlsVisible == true"
-        @click="fullVideo"
-        class="border-black border-l px-2 bg-gray-200"
-      >
-        <font-awesome-icon icon="fa-solid fa-expand" />
-      </button>
-    </div>
+  <div @mouseenter="showControls" @mouseleave="hideControls" class="relative">
+    <video v-if="videoSrc.length > 0" :id="videoID" :src="videoSrc" @timeupdate="videoPlaying" :controls="controlsVisible"></video>
+    <!-- <VideoControls
+      v-if="controlsVisible && videoSrc != ''"
+      class="absolute bottom-0"
+      :videoElement="videoElement"
+    /> -->
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import VideoControls from "./VideoControls.vue";
 export default {
   name: "VideoPlayer",
+  components: { VideoControls },
   props: {
     videoSrc: {
-      required: false,
+      required: true,
+      default: "",
     },
   },
   data() {
     return {
+      timeElapsed: 0,
+      duration: 0,
       controlsVisible: false,
-      videoPlayer: null,
-      last: {
-        event: "",
-        timestamp: "",
-      },
+      videoID: "",
     };
   },
   methods: {
+    videoPlaying() {
+      this.timeElapsed = this.videoElement.currentTime;
+      this.duration = this.videoElement.duration;
+    },
     showControls() {
-      this.controlsVisible = true;
+      if (this.videoSrc != null) {
+        this.controlsVisible = true;
+      }
     },
     hideControls() {
-      this.controlsVisible = false;
+      if (this.videoSrc != null) {
+        this.controlsVisible = false;
+      }
     },
+  },
+  created() {
+    this.videoID = (Math.random() + 1).toString(36).substring(7);
+  },
+  computed: {
+    videoElement() {
+      if (this.videoSrc.length > 0) {
+        return document.getElementById(this.videoID);
+      }
+    },
+    // getCurrentTime() {
+    //   if (this.videoSrc.length > 0) {
+    //     return this.videoElement.currentTime;
+    //   }
+    // },
+    // getDuration() {
+    //   if (this.videoSrc.length > 0) {
+    //     return this.videoElement.duration;
+    //   }
+    // },
+    // isPlaying() {
+    //   return this.videoElement?.paused ? false : true;
+    // },
   },
 };
 </script>

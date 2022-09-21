@@ -17,7 +17,8 @@
     <hr class="border-black" />
     <div class="flex justify-between h-96">
       <div
-        class=" basis-1/2
+        class="
+          basis-1/2
           bg-gray-100
           py-1
           overflow-y-scroll overflow-x-hidden
@@ -46,12 +47,18 @@ export default {
     Event,
     VideoPlayer,
   },
+  props: {
+    events: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+  },
   data() {
     return {
       date: null,
-      events: null,
       eventDays: null,
-      videoSrc: null,
+      videoSrc: "",
       selectedEvent: null,
     };
   },
@@ -62,18 +69,18 @@ export default {
         this.videoSrc = response.data[0];
       });
     },
-    getEvents() {
-      axios
-        .get(`events${this.date ? "?date=" + this.date : ""}`)
-        .then((response) => {
-          this.events = response.data[1].reverse();
-        });
-    },
+    // getEvents() {
+    //   axios
+    //     .get(`events${this.date ? "?date=" + this.date : ""}`)
+    //     .then((response) => {
+    //       this.events = response.data[1].reverse();
+    //     });
+    // },
     getEventDays() {
       axios.get(`events/dates`).then((response) => {
         this.date = response.data[0];
         this.eventDays = response.data;
-        this.getEvents();
+        // this.getEvents();
       });
     },
   },

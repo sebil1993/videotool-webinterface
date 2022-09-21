@@ -48,15 +48,5 @@ class CameraController extends Controller
         exec($path . "/initCamera $request->ip_address $request->username $request->password", $output, $resultcode);
         return $output;
     }
-    public function trytry()
-    {
-        return asset('storage/event_id_6.mp4');
-    }
-    // public function getPlaylistStream(Camera $camera)
-    // {
-    //     $lastEvent = Event::where('camera_id', $camera->id)->orderByDesc('id')->first();
-    //     if ($lastEvent == null)
-    //         die("keine Events für Kamera $camera->ip_address");
-    //     return asset("storage" . substr($lastEvent->path, strpos($lastEvent->path, "/cameras") + strlen("/cameras")));
-    // }
+
 }

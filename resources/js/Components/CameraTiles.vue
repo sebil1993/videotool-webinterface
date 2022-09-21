@@ -26,10 +26,19 @@
         <label> {{ camera.username }} </label>
       </div>
     </div>
-    <VideoPlayer
-      class="border border-black"
-      videoSrc="http://videotool-webinterface.test/storage/AXIS_M2025-LE_ACCC8EA80800/events/event_id_24.mp4"
-    />
+    <div v-if="lastEvent.timeStamp">
+      <div class="flex justify-between">
+        <label> Zeitpunkt </label>
+        <label>
+          {{
+            lastEvent.timeStamp.split("T")[0] +
+            " " +
+            lastEvent.timeStamp.split("T")[1].split(".")[0]
+          }}
+        </label>
+      </div>
+      <VideoPlayer :videoSrc="lastEvent.videoSrc" />
+    </div>
     <div class="flex justify-between">
       <button
         class="
@@ -124,13 +133,31 @@ export default {
       default: false,
     },
   },
-
+  data() {
+    return {
+      lastEvent: {
+        timeStamp: null,
+        videoSrc: null,
+      },
+    };
+  },
   methods: {
-    deleteCamera() {
-      this.stopBuffer();
-      axios.delete(`cameras/${this.camera.id}`).then(() => {
-        this.$emit("getCameras");
+    getLastEvent() {
+      axios.get(`events/${this.camera.id}/last`).then((response) => {
+        this.lastEvent.videoSrc = response.data[0];
+        this.lastEvent.timeStamp = response.data[1];
       });
+    },
+    deleteCamera() {
+      if (
+        confirm(
+          `Delete Camera? (ID: ${this.camera.id} IP: ${this.camera.ip_address})`
+        )
+      ) {
+        axios.delete(`cameras/${this.camera.id}`).then(() => {
+          this.$emit("getCameras");
+        });
+      }
     },
     startBuffer() {
       console.log("startBuffer", this.camera.id);
@@ -138,7 +165,7 @@ export default {
     },
     stopBuffer() {
       if (this.buffer != null) {
-        axios.delete(`processes/${this.camera.id}`).then((response) => {
+        axios.get(`processes/${this.camera.id}/stop`).then((response) => {
           this.$emit("stopBuffer", this.camera.id);
           console.log(`stopped buffer for ${this.camera.ip_address}`);
           console.log(response.data);
@@ -146,12 +173,14 @@ export default {
       }
     },
     triggerEvent() {
-      console.log(`trigger/${this.camera.id}`);
-      axios.get(`trigger/${this.camera.id}`).then((response) => {
+      console.log(`processes/${this.camera.id}/trigger`);
+      axios.get(`processes/${this.camera.id}/trigger`).then((response) => {
         console.log(response.data);
       });
     },
   },
-  created() {},
+  created() {
+    this.getLastEvent();
+  },
 };
 </script>

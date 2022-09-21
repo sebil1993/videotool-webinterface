@@ -74,24 +74,36 @@ class ProcessController extends Controller
         }
         //clear the buffer 
     }
-    public function getProcessInfo(Request $request)
+    public function stoppo(Camera $camera)
     {
-        // return proc_get_status(33525);
-
-
-        $descriptorspec = array(
-            0 => array("pipe", "r"),
-            1 => array("pipe", "w"),
-            2 => array("pipe", "w")
-        );
-        $cwd = getcwd();
-        $path = app_path('bin');
-        $command = $path . "/exec ./startBufferRecord 10.15.100.200";
-
-        $process = proc_open($command, $descriptorspec, $pipes, $cwd);
-
-        return proc_get_status($process);
+        return $this->processRunning("ffmpeg");
+        // if (!Process::where('camera_id', $camera->id)->exists()) {
+        //     $camDirectoryName = $camera->manufacturer . "_" . $camera->model . "_" . $camera->serialnumber;
+        //     $storage = storage_path('app/cameras/' . $camDirectoryName);
+        //     $storage = str_replace(" ", "_", $storage);
+        //     $fileArray =  glob($storage . "/$camera->serialnumber*");
+        //     $count = 0;
+        //     foreach ($fileArray as $file) {
+        //         unlink($file);
+        //         $count++;
+        //     }
+        //     return "deleted $count files";
+        // } else {
+        //     die("process still running");
+        // }
     }
+
+    public function processRunning(string $process)
+    {
+        return trim(shell_exec("pgrep $process"));
+        // if (empty(trim(shell_exec("pgrep $process")))) {
+        //     return false;
+        // } else {
+        //     return true;
+        // }
+    }
+
+
     public function concateBuffer()
     {
         if (Process::where("command", "concateBuffer")->exists())
@@ -144,9 +156,6 @@ class ProcessController extends Controller
         if (!msg_send($msqid, 12, "CONCATE_$camera->id" . "_$event->id\0", false))
             die("msg_send");
 
-        return "sent: CONCATE_$camera->id" . "_$event->id\0" . " ftok: $key";
+        return "sent: CONCATE_$camera->id" . "_$event->id" . " ftok: $key";
     }
 }
-
-
- 
