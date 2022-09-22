@@ -69,18 +69,14 @@ export default {
         this.videoSrc = response.data[0];
       });
     },
-    // getEvents() {
-    //   axios
-    //     .get(`events${this.date ? "?date=" + this.date : ""}`)
-    //     .then((response) => {
-    //       this.events = response.data[1].reverse();
-    //     });
-    // },
+    getEvents() {
+      this.$emit("setDate", this.date);
+    },
     getEventDays() {
       axios.get(`events/dates`).then((response) => {
         this.date = response.data[0];
         this.eventDays = response.data;
-        // this.getEvents();
+        this.$emit('setDate',this.date);
       });
     },
   },

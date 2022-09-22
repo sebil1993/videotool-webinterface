@@ -31,9 +31,9 @@
         <label> Zeitpunkt </label>
         <label>
           {{
-            lastEvent.timeStamp.split("T")[0] +
+            lastEvent?.timeStamp?.split("T")[0] +
             " " +
-            lastEvent.timeStamp.split("T")[1].split(".")[0]
+            lastEvent?.timeStamp?.split("T")[1].split(".")[0]
           }}
         </label>
       </div>

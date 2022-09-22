@@ -36,7 +36,12 @@
         <label class="m-auto text-9xl text-gray-200">+</label>
       </div>
     </div>
-    <Timeline class="" :events="events" />
+    <Timeline
+      class=""
+      :events="events"
+      @getEvents="getEvents"
+      @setDate="setDate"
+    />
   </div>
 </template>
 
@@ -55,9 +60,14 @@ export default {
       buffers: null,
       cameras: null,
       events: null,
+      date: null,
     };
   },
   methods: {
+    setDate(date) {
+      this.date = date;
+      this.getEvents();
+    },
     getCameras() {
       axios.get("/cameras").then((response) => {
         this.cameras = response.data;
@@ -74,9 +84,11 @@ export default {
       });
     },
     getEvents() {
-      axios.get(`events`).then((response) => {
-        this.events = response.data[1].reverse();
-      });
+      axios
+        .get(`events${this.date ? "?date=" + this.date : ""}`)
+        .then((response) => {
+          this.events = response.data[1].reverse();
+        });
     },
 
     stopBuffer(camera) {
@@ -116,7 +128,7 @@ export default {
   created() {
     this.getCameras();
     this.getRunningBuffers();
-    this.getEvents();
+    this.getEvents(this.date);
     this.startRefresh();
   },
   computed: {
