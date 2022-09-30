@@ -24,6 +24,7 @@ Route::get('/', function () {
 
 Route::get('cameras', [CameraController::class, "index"]);
 Route::post('cameras/init', [CameraController::class, "initCamera"]);
+Route::get('cameras/find', [CameraController::class, "discover"]);
 Route::get('cameras/{camera}', [CameraController::class, "show"]);
 Route::delete('cameras/{camera}', [CameraController::class, "destroy"]);
 
